@@ -1,0 +1,14 @@
+# Configuration spécifique à Kong (Helm Values)
+env:
+  database: "off"        # Mode DB-less pour la simplicité du lab
+  role: traditional
+
+ingressController:
+  enabled: true
+  installCRDs: true      # Important pour qu'ArgoCD crée les ressources Kong Custom
+
+proxy:
+  type: LoadBalancer     # Commande le Load Balancer chez Scaleway
+  annotations:
+    # Optionnel : force l'utilisation du réseau privé Scaleway
+    service.beta.kubernetes.io/scw-loadbalancer-use-hostname: "true"

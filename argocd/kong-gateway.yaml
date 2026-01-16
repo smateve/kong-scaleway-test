@@ -6,18 +6,14 @@ metadata:
 spec:
   project: default
   source:
-    chart: kong
+    # On pointe vers le dépôt officiel pour le code de Kong...
     repoURL: https://charts.konghq.com
+    chart: kong
     targetRevision: 2.36.0
     helm:
-      values: |
-        env:
-          database: "off"
-        ingressController:
-          enabled: true
-          installCRDs: true
-        proxy:
-          type: LoadBalancer
+      # ...MAIS on utilise ton fichier values.yaml sur TON GitHub pour les réglages
+      valueFiles:
+        - https://raw.githubusercontent.com/smateve/kong-scaleway-test/main/infrastructure/kong/values.yaml
   destination:
     server: https://kubernetes.default.svc
     namespace: kong
@@ -25,6 +21,5 @@ spec:
     automated:
       prune: true
       selfHeal: true
-    # C'est ici que se trouvait l'erreur :
     syncOptions:
       - CreateNamespace=true
