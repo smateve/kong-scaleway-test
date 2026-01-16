@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kong-gateway
+  namespace: argocd
+spec:
+  project: default
+  source:
+    chart: kong
+    repoURL: https://charts.konghq.com
+    targetRevision: 2.36.0
+    helm:
+      values: |
+        env:
+          database: "off"
+        ingressController:
+          enabled: true
+          installCRDs: true
+        proxy:
+          type: LoadBalancer
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: kong
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    # C'est ici que se trouvait l'erreur :
+    syncOptions:
+      - CreateNamespace=true
