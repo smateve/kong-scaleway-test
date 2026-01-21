@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: echo-api
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/smateve/kong-scaleway-test
+    targetRevision: HEAD
+    path: apps/echo-api # Le chemin vers ton nouveau dossier
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: kong
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
